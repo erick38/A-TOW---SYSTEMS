@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "towing-systems"
+version = "0.1.0"
+description = ""
+authors = ["idolla <3rick8@A.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^3.2.5"
+Pillow = "^8.3.2"
+
+[tool.poetry.dev-dependencies]
+Django = "^3.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

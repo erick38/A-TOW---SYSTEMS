@@ -1,0 +1,54 @@
+    {% load static %}
+    
+        {% if request.user.is_staff %}
+        <div class='nav'>
+<nav>
+         <head>
+            <ul>
+             <link rel="stylesheet" type="text/css"
+              href="{% static 'css/main.css' %}">
+        <li><h1>A - OK Tire & Towing</h1></li>
+        <li><a href='/customertask'>task</a></li>
+        <li><a href="/">management</a></li>
+        <li><a href="/addaccount">Add Employee</a></li>
+        <li><a href='/{{user.username}}'>profile</a></li>
+        <li><a href='/payment'>Drop Time</a></li>
+        <li><a href='/page'>Page</a></li>
+        
+    </ul>
+</head>
+</nav>
+    </div>
+
+    {% else %}
+
+<nav>
+    <head>
+    <ul>
+        {% if request.user.is_authenticated %}
+        <link rel="stylesheet" type="text/css"
+         href="{% static 'css/main.css' %}">
+   <li><h1>A - OK Tire & Towing</h1></li>
+   <li><a href='/customertask'>task</a></li>
+   <li><a href='/{{user.username}}'>profile</a></li>
+   <li><a href='/payment'>Drop Time</a></li>
+</ul>
+</head>
+</nav>
+
+{% else %}
+<nav>
+    <head>
+    <ul>
+<link rel="stylesheet" type="text/css"
+href="{% static 'css/main.css' %}">
+<li><h1>A - OK Tire & Towing</h1></li>
+<li><a href='/{{user.username}}'></a></li>
+<li><a href='/payment'></a></li>
+</ul>
+</head>
+</nav>
+{% endif %}
+{% endif %}
+</nav>
+</div>

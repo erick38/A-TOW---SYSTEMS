@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+    {% include 'navbar.html'%}
+    {% block content %}
+    {% endblock %}
+    <h1>------------------------------------------------------------------------------------------------------------------------------------</h1>
+{% if request.user.is_staff %}
+    <body>
+        <h1>Management</h1>
+<form method="POST" action="/logout/">
+    {% csrf_token %}
+    <input type='submit' value='logout'/>
+</form>
+<p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>
+
+    <div class="clock">
+    <h2>clock-ins</h2>
+    -----
+    {% for post in posts %}
+
+<ul>
+    <li>name: {{ post.author }}</li>
+    <li>status: {{ post.clock_status }}</li>
+    <li>Time: {{ post.clock_time }}</li>
+</ul> 
+{% endfor %}
+</div>
+
+<div class="clockout">
+<h2>clock-outs</h2>
+---------
+{% for i in clock_out %}
+<ul>
+    <li>name:{{ i.author }}</li>
+    <li>clocking-status:{{ i.clock_status }}</li>
+    <li>Time:{{ i.clock_time }}</li>
+</ul> 
+{% endfor %}
+</div>
+</body>
+</html>
+
+{% else %}
+<body>
+<form method="POST" action="/login/">
+    {% csrf_token %}
+    <input type='submit' value='login'/>
+</form>
+<p>Hello, not logged in
+{% endif %}
+</body>
+</html>

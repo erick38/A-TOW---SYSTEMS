@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- ===== CSS ===== -->
+        <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+
+        <!-- ===== BOX ICONS ===== -->
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+
+    </head>
+    <body>
+        <!--===== HEADER =====-->
+        <header class="l-header">
+            <nav class="nav bd-grid">
+                
+                <div>
+                    <a href="/" class="nav__logo">{{ home.name }}</a>
+                </div>
+
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item">708-646-7407</li>
+                        <li class="nav__item"><a href="tel:47086467407" class="nav__link">call now</a></li>
+                        <li class="nav__item"><a href="#home" class="nav__link active">Home</a></li>
+                        <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
+                        <li class="nav__item"><a href="#skills" class="nav__link">services</a></li>
+                        <!-- <li class="nav__item"><a href="#gallery" class="nav__link">Gallery</a></li> -->
+                        <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
+                        <li class="nav__item"><a href="https://www.google.com/maps/dir//A+-+OK+Tire+%26+Towing/@41.8440536,-87.8252049,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x880e3331c00a8cb9:0xeab0190bedb480dc!2m2!1d-87.7551627!2d41.8439911" class="nav__link">Get directions</a></li>
+                        <li class="nav__item"><a href="login/" class="nav__link">Log-In</a></li>
+                        
+                    </ul>
+                </div>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class='bx bx-menu'></i>
+                </div>
+            </nav>
+        </header>
+
+        <main class="l-main">
+            <!--===== HOME =====-->
+            <section class="home" id="home">
+                <div class="home__container bd-grid">
+                    <h1 class="home__title"><span>{{ home.greetings_1 }}</span><br>{{ home.greetings_2 }}.</h1>
+
+                    <div class="home__scroll">
+                        <a href="#about" class="home__scroll-link"><i class='bx bx-up-arrow-alt' ></i>cicero-chicago area</a>
+                    </div>
+
+                    <img src="{{ home.picture.url }}" alt="" class="home__img">
+                </div>
+            </section>
+            
+            <!--===== ABOUT =====-->
+            <section class="about section" id="about">
+                <h2 class="section-title">About / acerca</h2>
+
+                <div class="about__container bd-grid">
+                  
+                        <!-- <img src="{% static 'assets/img/perfil.png' %}" alt=""> -->
+                        <img src="{{ about.profile_img.url }}" alt="">
+           
+
+                    <div>
+                        <h2 class="about__subtitle">{{ about.heading }}</h2>
+                        <span class="about__profession">{{ about.career }}</span>
+                        <p class="about__text">{{ about.description }}</p>
+
+                        <div class="about__social">
+
+                            {% for profile in about.profile_set.all %}
+                                <a href="{{ profile.link }}" class="about__social-icon">
+                                    <i class='bx bxl-{{ profile.social_name }}' ></i>
+                                </a>
+                            {% endfor %}
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--===== SKILLS =====-->
+            <section class="skills section" id="skills">
+                <h2 class="section-title"> Services </h2>
+
+                <div class="skills__container bd-grid">
+                    <div class="skills__box">
+                        {% for category in categories %}
+                        <h3 class="skills__subtitle">{{category.name}}</h3>
+                            {% for skills in category.skills_set.all %}
+                            
+                                <span class="skills__name"><a href='tel:47733829650'>call {{skills.skill_name}}</a></span>
+                            {% endfor %}
+                        {% endfor %}
+                        
+                    </div>
+
+
+                        <img src="{% static 'assets/img/skill.jpg' %}" alt="">
+                </div>
+            </section>
+
+            <!--===== PORTFOLIO =====-->
+            <section class="portfolio section" id="gallery">
+                <h2 class="section-title">Gallery / Galeria</h2>
+
+                
+                <div class="portfolio__container bd-grid">
+
+                    {% for gallery in galleries %}
+                    
+                    <div class="portfolio__img">
+                        <img src="{{ gallery.image.url }}" alt="">
+
+                        <div class="portfolio__link">
+                            <a href="{{ gallery.link }}" class="portfolio__link-name">shop</a>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                    
+                </div>
+                
+            </section>
+
+            <!--===== CONTACT =====-->
+            <section class="contact section" id="contact">
+                <h2 class="section-title">Contact Us</h2>
+
+                <div class="contact__container bd-grid">
+
+                    <div class="contact__info">
+                        <h3 class="contact__subtitle">EMAIL</h3>
+                        <span class="contact__text">Aoktire&towing@gmail.com</span>
+
+                    </div>
+
+
+                    
+                        <div class="contact__info">
+
+                        <h3 class="contact__subtitle">PHONE</h3>
+                            <span class="contact__text">708-646-7407 OR</span>   
+                            <span class="contact__text">773-382-9650</span>  <br>
+                        </div>
+
+                    <div class="contact__info">
+
+                        <h3 class="contact__subtitle">5224 West 26th Street, Cicero, Illinois 60804, United States</h3>
+                        <button href="https://www.google.com/maps/dir//A+-+OK+Tire+%26+Towing/@41.8440536,-87.8252049,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x880e3331c00a8cb9:0xeab0190bedb480dc!2m2!1d-87.7551627!2d41.8439911">Get directions</button>
+
+                      
+                        
+
+                    </div>
+
+            </section>
+            
+        </main>
+
+        <!--===== FOOTER =====-->
+        <footer class="footer section">
+            <div class="footer__container bd-grid">
+                <div class="footer__data">
+                    <h2 class="footer__title">@A-okTire&Towing</h2>
+                    <p class="footer__text">make tow appointments for your cars.</p>
+                    <p class="footer__text">search in our inventory for the Tire-size you're looking for.</p>
+                </div>
+
+                <div class="footer__data">
+                    <h2 class="footer__title">EXPLORE</h2>
+                    <ul>
+                        <li><a href="#home" class="footer__link">Home</a></li>
+                        <li><a href="#about" class="footer__link">About</a></li>
+                        <li><a href="#skills" class="footer__link">services</a></li>
+                        <li><a href="#portfolio" class="footer__link">ask for size</a></li>
+                        <li><a href="#Contact" class="footer__link">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__data">
+                    <h2 class="footer__title">FOLLOW</h2>
+                    <a href="#" class="footer__social"><i class='bx bxl-instagram' ></i></a>
+                    <a href="#" class="footer__social"><i class='bx bxl-linkedin' ></i></a>
+                </div>
+
+
+            </div>
+        </footer>
+
+        <!--===== SCROLL REVEAL =====-->
+        <script src="https://unpkg.com/scrollreveal"></script>
+
+        <!--===== MAIN JS =====-->
+        <script src="{% static 'assets/js/main.js' %}"></script>
+    </body>
+</html>

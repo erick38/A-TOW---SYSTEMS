@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+    <body>
+        {% include 'navbar.html'%}
+        {% block content %}
+        {% endblock %}
+        <h1>------------------------------------------------------------------------------------------------------------------------------------</h1>
+        <h1>Management</h1>
+{% if request.user.is_staff %}
+<form method="POST" action="/logout/">
+    {% csrf_token %}
+    <input type='submit' value='logout'/>
+</form>
+<p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>
+
+
+    <p>PAGE
+{% else %}
+<h1>-----------------------------------------------------------</h1>
+
+<form method="POST" action="/login/">
+    {% csrf_token %}
+    <input type='submit' value='login'/>
+</form>
+<p>Hello, not logged in
+{% endif %}
+</body>
+</html>
