@@ -1,13 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import About, Category, Clock_in, Gallery, Home, Mensaje, MyUser, Skills
+from .models import Clock_in, Message, MyUser, Session,Conversation
 # Register your models here.
 
 admin.site.register(MyUser, UserAdmin)
 admin.site.register(Clock_in)
-admin.site.register(Gallery)
-admin.site.register(Mensaje)
-admin.site.register(Category)
-admin.site.register(About)
-admin.site.register(Home)
-admin.site.register(Skills)
+admin.site.register(Message)
+admin.site.register(Session)
+admin.site.register(Conversation)

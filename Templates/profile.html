@@ -1,53 +1,86 @@
-<!DOCTYPE html>
-<html>
+{% include 'navbar.html'%}
+
+{% block content %}
+    <style>
+        .h3 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+            padding: 20px;
+            width: 30%;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #444;
+        }
+        .card p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #777;
+        }
+        .clockouts {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .clockin,
+        .clockout {
+            width: 50%;
+            text-align: center;
+        }
+
+        .clockin {
+            border-right: 2px solid #000;
+        }
+    </style>
+
     <body>
-        {% include 'navbar.html'%}
-        {% block content %}
-        {% endblock %}
-      
-        <h1>------------------------------------------------------------------------------------------------------------------------------------</h1>
-        {% if user.is_authenticated %}
-        <form method="POST" action="/logout/">
-            {% csrf_token %}
-            <input type='submit' value='logout'/>
-        </form>
-        {% else %}
-      
-        <form method="POST" action="/login/">
-            {% csrf_token %}
-            <input type='submit' value='login'/>
-        </form>
+        <div class="h3">
+            <h3><p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>. You have worked {{ total_hours }} hour(s) this week.</p> </h3>
+        </div>
+        <br>
+        <br>
+        
+        <div class="clockouts">
+            
+            <div class="card">
+                <h2>Clock In</h2>
+                <p>Times</p>
+                <ul>
+                    {% for i in clock_in %}
+                        <li>{{ i.clock_time }} </li> 
+                    {% endfor %}
+                </ul> 
+            </div>
+
+            <div class="card">
+                <h2>Clock Out</h2>
+                <p>Times</p>
+                <ul>
+                    {% for i in clock_out %}
+                        <li>{{ i.clock_time }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </body>
-    </html>
-        {% endif %}
-<p>Hello,<a href='/{{user.username}} '>{{user.username}}</a>
-   you have worked ___ hr's this week.
-
-
-<div class='clockouts'>
-
-    <div class="clockin">
-        <h1>Details</h1>
-        <p>clock in
-        <ul>
-            {% for i in clock_in %}
-
-            <li>{{i.clock_time}}</li>
-        </ul>
-    {% endfor %}
-</div>
-
-    <div class="clockout">
-        <p>clock out</p>
-        <ul> 
-            {% for i in clock_out %}
-
-            <li>{{i.clock_time}}</li>
-        </ul>
-    {% endfor %}
-</div>
-
-
-</div>
-</body>
-</html>
+{% endblock %}

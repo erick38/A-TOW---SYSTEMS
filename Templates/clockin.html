@@ -1,8 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Dashboard</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+			margin: 0;
+			padding: 0;
+		}
+		.container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			padding: 20px;
+		}
+		.card {
+			background-color: #fff;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+			padding: 20px;
+			width: 30%;
+			margin-bottom: 20px;
+		}
+		.card h2 {
+			margin-top: 0;
+			font-size: 24px;
+			color: #444;
+		}
+		.card p {
+			margin-top: 10px;
+			font-size: 16px;
+			color: #777;
+		}
+	</style>
+<div class="container">
+    <div class="card">
+        <h2>Clock In</h2>
+        {% for i in post %}
+            {% if i.clock_status == 'in' %}
+                <ul>
+                    <li>name:{{ i.author }}</li>
+                    <li>Time:{{ i.clock_time }}</li>
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="card">
+        <h2>Clock Out</h2>
+        {% for i in post %}
+            {% if i.clock_status == 'out' %}
+                <ul>
+                    <li>name:{{ i.author }}</li>
+                    <li>Time:{{ i.clock_time }}</li>
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="card">
+        <h2>Tasks</h2>
+        <p>{{ task_count }} Tasks</p>
+    </div>
+</div>
 
-    {% for i in post %}
-<ul>
-    <li>name:{{ i.author }}</li>
-    <li>clocking-status:{{ i.clock_status }}</li>
-    <li>Time:{{ i.clock_time }}</li>
-</ul> 
-{% endfor %}

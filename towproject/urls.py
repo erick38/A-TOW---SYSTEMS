@@ -16,17 +16,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from towingapp import views
+from towingapp.views import (
+    CreateConversationView,
+    ConversationView,
+    customer_task
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('', views.index, name='homepage'),
-    path('form', views.add_message),
-    path('h/', views.home, name='homepage'),
-    path('payment/', views.add_clockin, name='payment'),
+    path('', views.index, name='homepage'),
+    path('h', views.home, name='homepage'),
+    path('payment/', views.add_clockin, name='add_clockin'),
     path('logout/', views.logout_view, name='logout_view'),
     path('login/', views.login_view, name='login_view'),
     path('page/', views.page, name='page'),
-    path('customertask/', views.customer_task, name='customertask'),
+    path('management/', views.page, name='management'),
+    path('<str:username>/createconversation/', CreateConversationView.as_view(), name='createconversation'),
+    path('<str:username>/conversation/<int:pk>/', ConversationView.as_view(), name='conversation'),
+    path('<str:username>/customertask/', customer_task, name='customertask'),
     path('addaccount/', views.add_AccountView),
-    path('<str:MyUser_id>/', views.profile_view, name='profile'),
+    path('<str:MyUser_str>/', views.profile_view, name='profile'),
     # path('clock/', views.clockin_detail),
 ]

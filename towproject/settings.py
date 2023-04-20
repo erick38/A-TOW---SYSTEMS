@@ -23,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y1=@_-&huy&imf+ck37!$psqngrsm#&bj#1lyomfy%!v%lp1ab'
+with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://localhost:8000' ,'localhost:8000','0.0.0.0']
 
 
 # Application definition
@@ -135,3 +136,4 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, 'static'),
 ]
 LOGIN_URL = '/login/'
+TIME_ZONE = 'America/Chicago'

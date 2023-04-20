@@ -13,6 +13,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+secret_key.txt
+settings.py
 build/
 develop-eggs/
 dist/
@@ -143,3 +145,4 @@ dmypy.json
 cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+

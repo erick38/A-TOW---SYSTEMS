@@ -1,12 +1,9 @@
-
-<!DOCTYPE html>
-<html>
+{% include 'navbar.html'%}
+{% block content %}
+{% endblock %}
     <body>
-        {% include 'navbar.html'%}
-        {% block content %}
-        {% endblock %}
         <h1>------------------------------------------------------------------------------------------------------------------------------------</h1>
-        <h1>Management</h1>
+        <h1>page</h1>
 {% if request.user.is_staff %}
 <form method="POST" action="/logout/">
     {% csrf_token %}
@@ -14,11 +11,11 @@
 </form>
 <p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>
 
-
-    <p>PAGE
+    <p>PAGE</p>
+        </body>
 {% else %}
 <h1>-----------------------------------------------------------</h1>
-
+<body>
 <form method="POST" action="/login/">
     {% csrf_token %}
     <input type='submit' value='login'/>
@@ -26,4 +23,3 @@
 <p>Hello, not logged in
 {% endif %}
 </body>
-</html>

@@ -1,54 +1,72 @@
-    {% load static %}
-    
-        {% if request.user.is_staff %}
-        <div class='nav'>
-<nav>
-         <head>
-            <ul>
-             <link rel="stylesheet" type="text/css"
-              href="{% static 'css/main.css' %}">
-        <li><h1>A - OK Tire & Towing</h1></li>
-        <li><a href='/customertask'>task</a></li>
-        <li><a href="/">management</a></li>
-        <li><a href="/addaccount">Add Employee</a></li>
-        <li><a href='/{{user.username}}'>profile</a></li>
-        <li><a href='/payment'>Drop Time</a></li>
-        <li><a href='/page'>Page</a></li>
-        
-    </ul>
-</head>
-</nav>
-    </div>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Style the navbar */
+  nav {
+    background-color: #1A2B42;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  /* Style the logo */
+  nav h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  /* Style the navigation links */
+  nav ul {
+    display: flex;
+    list-style: none;
+  }
+  
+  nav ul li {
+    margin-left: 20px;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  nav ul li a:hover {
+    background-color: #fff;
+    color: #1A2B42;
+  }
+</style>
 
-    {% else %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
 <nav>
-    <head>
-    <ul>
-        {% if request.user.is_authenticated %}
-        <link rel="stylesheet" type="text/css"
-         href="{% static 'css/main.css' %}">
-   <li><h1>A - OK Tire & Towing</h1></li>
-   <li><a href='/customertask'>task</a></li>
-   <li><a href='/{{user.username}}'>profile</a></li>
-   <li><a href='/payment'>Drop Time</a></li>
-</ul>
-</head>
+  <ul>
+    <li><h1>A - OK Tire & Towing</h1></li>
+    {% if request.user.is_staff %}
+    <li><a href="{% url 'customertask' username=user %}">task</a></li>       
+    <li><a href="/addaccount">Add Employee</a></li>
+    {% endif %}
+    <li><a href='/{{user.username}}'>profile</a></li>
+    <li><a href='/payment'>Drop Time</a></li>
+    <li><a href="{% url 'createconversation' user.username %}">Create Conversation</a></li>
+    {% if request.user.is_authenticated %}
+    <form method="POST" action="/logout/">
+      {% csrf_token %}
+      <input type='submit' value='logout'/>
+    </form>
+    {% endif %}
+  </ul>
 </nav>
-
-{% else %}
-<nav>
-    <head>
-    <ul>
-<link rel="stylesheet" type="text/css"
-href="{% static 'css/main.css' %}">
-<li><h1>A - OK Tire & Towing</h1></li>
-<li><a href='/{{user.username}}'></a></li>
-<li><a href='/payment'></a></li>
-</ul>
-</head>
-</nav>
-{% endif %}
-{% endif %}
-</nav>
-</div>

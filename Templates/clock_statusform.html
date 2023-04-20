@@ -1,0 +1,54 @@
+<body>
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="clock_status" id="inlineRadio1" value="clock-in" checked>
+        
+        <label class="form-check-label" for="inlineRadio1">Clock-in</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="clock_status" id="inlineRadio2" value="clock-out">
+        <label class="form-check-label" for="inlineRadio2">Clock-out</label>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Submit">
+    <input id="clock-time" type="hidden" name="clock_time">
+</form>
+        <h1><div id="timo">$:$$:$$ PM</div></h1>
+</body>
+
+<style>
+    form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .form-check-label {
+        margin-left: 10px;
+    }
+
+    input[type="submit"] {
+        margin-left: 20px;
+    }
+</style>
+
+<script>
+    function updateTimer() {
+        var now = new Date();
+        var timerDiv = document.getElementById('timo');
+        timerDiv.innerHTML = now.toLocaleTimeString();
+    }
+
+    setInterval(updateTimer, 1000);
+</script>
+<style>
+    #timo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 7rem;
+        height: 90vh;
+    }
+</style>

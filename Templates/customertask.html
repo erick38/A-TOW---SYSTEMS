@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html>
-    <body>
-        {% include 'navbar.html'%}
-        {% block content %}
-        {% endblock %}
-<h1>hello birhc</h1>
 
+{% include 'navbar.html'%}
+{% block content %}
+{% endblock %}
+<body>
+<h1>{{ user.username }}'s   --EMPLOYEE'S TASK DASHBOARD MESSENGER-- </h1>
+
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Conversations</h2>
+      <ul>
+        {% for conversation in conversations %}
+          <li>
+            <a href="{% url 'customertask' user.username %}?conversation_id={{ conversation.id }}">
+              {% for participant in conversation.participants.all %}
+                {% if participant.username != user.username %}
+                  {{ participant.username }}
+                {% endif %}
+              {% endfor %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-8">
+      {% if current_conversation %}
+        <h2>Messages with {% for participant in current_conversation.participants.all %}{% if participant.username != user.username %}{{ participant.username }}{% endif %}{% endfor %}</h2>
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li>
+                <strong>Message sent by {{ message.sender.username }} at {{ message.created_at }}:</strong>
+                {{ message.message }}
+                {{ message.replied }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No messages yet.</p>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="conversation_id" value="{{ current_conversation.id }}">
+          <label for="{{ form.message }}">Reply:</label>
+          <textarea placeholder="Type message here" name="message"></textarea>
+          <button type="submit">Send</button>
+        </form>
+      {% else %}
+        <p>No conversation selected.</p>
+      {% endif %}
+    </div>
+  </div>
 </body>
-</html>

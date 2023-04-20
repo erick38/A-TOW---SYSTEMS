@@ -1,95 +1,53 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from django.urls import reverse
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+
+
 # Create your models here.me
 
 class MyUser(AbstractUser):
     username = models.CharField(max_length=30, unique=True)
     created_at = models.DateTimeField(default=timezone.now)
 
-class Clock_in(models.Model):
-    author = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True, blank=True)
-    STATUS_CHOICES = (
-            ('clock-in', 'clock-in'),
-            ('clock-out', 'clock-out'),
-            )
-    clock_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='clock-in', null=False)
+class Session(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    session_key = models.CharField(max_length=40)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+class Clock_in(models.Model):
+    author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    STATUS_CHOICES = (
+        ('clock-in', 'Clock-in'),
+        ('clock-out', 'Clock-out'),
+    )
+    clock_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='clock-in', null=False)
     clock_time = models.DateTimeField(default=timezone.now)
 
     def __str__(self) -> str:
         return self.clock_status
 
-
-class Home(models.Model):
-    name = models.CharField(max_length=25)
-    greetings_0 = models.CharField(max_length=20)
-    greetings_1 = models.CharField(max_length=20)
-    greetings_2 = models.CharField(max_length=24)
-    updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-# ABOUT SECTION
-
-class About(models.Model):
-    heading = models.CharField(max_length=50)
-    career = models.CharField(max_length=20)
-    description = models.TextField(blank=False)
-    profile_img = models.ImageField(upload_to='profile/')
     
-    updated = models.DateTimeField(auto_now=True)
+class Conversation(models.Model):
+    participants = models.ManyToManyField(MyUser, related_name='conversations')
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.career
-
-
-class Profile(models.Model):
-    about = models.ForeignKey(About,
-                                on_delete=models.CASCADE)
-    social_name = models.CharField(max_length=10)
-    link = models.URLField(max_length=200)
-
-
-
-# SKILLS SECTION
-
-class Category(models.Model):
-    name = models.CharField(max_length=20)
-
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Skill'
-        verbose_name_plural = 'Skills'
-
-    def __str__(self):
-        return self.name
-
-class Skills(models.Model):
-    category = models.ForeignKey(Category,
-                                on_delete=models.CASCADE)
-    skill_name = models.CharField(max_length=60)
-
-    
-
-# PORTFOLIO SECTION
-
-class Gallery(models.Model):
-    image = models.ImageField(upload_to='portfolio/')
-    link = models.URLField(max_length=200)
-
-    def __str__(self):
-        return f'Portfolio {self.id}'
-
-
-class Mensaje(models.Model):
-    name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=40)
-    message = models.TextField(blank=False)
-    date = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
+class Message(models.Model):
+    conversation = models.ForeignKey(
+        Conversation,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        verbose_name='Conversation',
+        null=False
+    )
+    sender = models.ForeignKey(
+        MyUser,
+        on_delete=models.CASCADE,
+        related_name='sent_messages',
+        verbose_name='Sender',
+        null=False
+    )
+    message = models.TextField(blank=False, verbose_name='Message')
+    created_at = models.DateTimeField(default=timezone.now, verbose_name='Created At')
