@@ -18,10 +18,9 @@ from django.urls import path
 from towingapp import views
 from towingapp.views import (
     CreateConversationView,
-    ConversationView,
-    customer_task
+    customer_task,
+    SendMessageView
 )
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='homepage'),
@@ -31,8 +30,8 @@ urlpatterns = [
     path('login/', views.login_view, name='login_view'),
     path('page/', views.page, name='page'),
     path('management/', views.page, name='management'),
-    path('<str:username>/createconversation/', CreateConversationView.as_view(), name='createconversation'),
-    path('<str:username>/conversation/<int:pk>/', ConversationView.as_view(), name='conversation'),
+    path('createconversation/', CreateConversationView, name='createconversation'),
+    path('<str:username>/conversation/<int:pk>/', SendMessageView.as_view(), name='send_messasge'),
     path('<str:username>/customertask/', customer_task, name='customertask'),
     path('addaccount/', views.add_AccountView),
     path('<str:MyUser_str>/', views.profile_view, name='profile'),

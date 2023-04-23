@@ -1,5 +1,5 @@
 from django import forms
-from towingapp.models import Message, Conversation
+from towingapp.models import Message, Conversation, MyUser
 from django.shortcuts import render,HttpResponseRedirect, get_object_or_404
 
 class MessageForm(forms.ModelForm):
@@ -19,6 +19,27 @@ class MessageForm(forms.ModelForm):
         cleaned_data['sender'] = self.user
         return cleaned_data
 
+class ConversationForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea)
+
+    def __init__(self, request, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+        self.fields['participants'] = forms.ModelMultipleChoiceField(
+            queryset=MyUser.objects.exclude(id=request.user.id),
+            widget=forms.CheckboxSelectMultiple
+    )
+    def save(self):
+        participants = list(self.cleaned_data['participants'])
+        participants.append(self.request.user)  # add sender back to the list of participants
+        conversation = Conversation.objects.create()
+        conversation.participants.set(participants)
+        message = Message.objects.create(
+            conversation=conversation,
+            sender=self.request.user,
+            message=self.cleaned_data['message']
+        )
+        return conversation
 
 
 class login_form(forms.Form):

@@ -15,11 +15,11 @@
         </body>
 {% else %}
 <h1>-----------------------------------------------------------</h1>
-<body>
+
 <form method="POST" action="/login/">
     {% csrf_token %}
     <input type='submit' value='login'/>
 </form>
-<p>Hello, not logged in
-{% endif %}
+<p>Hello, not logged in</p>
 </body>
+{% endif %}

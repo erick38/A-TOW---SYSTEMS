@@ -1,27 +1,6 @@
-{% extends 'navbar.html' %}
+{% include 'navbar.html'%}
 {% block content %}
-<!-- {% endblock %}
-<h1>Conversation with {{ conversation.other_user.username }}</h1>
-
-<ul>
-    {% for message in messages %}
-    <li>
-        <strong>{{ message.sender.username }}:</strong> {{ message.message }}
-        <span class="text-muted">{{ message.created_at|date:"F j, Y, g:i a" }}</span>
-    </li>
-    {% empty %}
-    <li>No messages in this conversation.</li>
-    {% endfor %}
-</ul>
-
-<form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="message">New Message:</label>
-        <textarea class="form-control" name="message" id="message" rows="3" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Send</button>
-</form> -->
+{% endblock %}
 {% if message %}
     <div class="alert alert-success" role="alert">
         Your message was sent successfully.

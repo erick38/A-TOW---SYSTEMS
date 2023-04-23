@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.contrib.auth.models import Group
 from towingapp.decorators import admin_only, prevent_multiple_users
 from django.contrib.auth import login, authenticate, logout
@@ -13,12 +12,12 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
-from django.views import View
+from django.views.generic.edit import CreateView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
-from towingapp.forms import MessageForm
+from towingapp.forms import MessageForm, ConversationForm
 from towingapp.models import Message, Conversation
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
@@ -33,124 +32,63 @@ from .forms import MessageForm
 def customer_task(request, username):
     user = get_object_or_404(MyUser, username=username)
     if request.user != user:
-        return HttpResponseRedirect(reverse('page'))
+        return redirect('home')
+    
+    conversations = Conversation.objects.filter(participants=user)
+    
+    if request.method == 'POST':
+        conversation_id = request.POST.get('conversation_id')
+        message = request.POST.get('message')
+        if conversation_id and message:
+            conversation = get_object_or_404(Conversation, id=conversation_id, participants=user)
+            message = Message.objects.create(sender=user, conversation=conversation, message=message)
+            message.save()
+    
+    current_conversation_id = request.GET.get('conversation_id')
+    current_conversation = None
+    messages = None
+    
+    if current_conversation_id:
+        current_conversation = get_object_or_404(Conversation, id=current_conversation_id, participants=user)
+        messages = Message.objects.filter(conversation=current_conversation).order_by('-created_at')
+    
+    return render(request, 'customertask.html', {
+        'user': user,
+        'conversations': conversations,
+        'current_conversation': current_conversation,
+        'messages': messages
+    })
+
+
+def CreateConversationView(request):
+    if request.method == 'POST':
+        form = ConversationForm(request, request.POST)
+        if form.is_valid():
+            conversation = form.save()
+            return redirect(reverse('customertask', args=[request.user.username]))
     else:
-        conversations = user.conversations.all()
-        current_conversation = None
-        messages = None
-
-        if 'conversation_id' in request.GET:
-            conversation_id = request.GET['conversation_id']
-            try:
-                current_conversation = Conversation.objects.get(id=conversation_id)
-                messages = current_conversation.messages.all()
-            except Conversation.DoesNotExist:
-                messages = None
-                current_conversation = None
-
-        if request.method == 'POST':
-            form = MessageForm(request.POST, user=user)
-            if form.is_valid():
-                message = form.save(commit=False)
-                message.sender = user
-                message.conversation = current_conversation
-                message.save()
-        else:
-            form = MessageForm(user=user)
-
-        context = {
-            'user': user,
-            'conversations': conversations,
-            'current_conversation': current_conversation,
-            'messages': messages,
-            'form': form,  # include the form in the context
-        }
-
-        return render(request, 'customertask.html', context)
+        form = ConversationForm(request)
+    return render(request, 'generic_form.html', {'form': form})
 
 
-
-class ConversationForm(forms.ModelForm):
-    message = forms.CharField(max_length=1000, widget=forms.Textarea)
-
-    def __init__(self, *args, **kwargs):
-        username = kwargs.pop('username', None)
-        exclude_sender = kwargs.pop('exclude_sender', False)
-        super().__init__(*args, **kwargs)
-        if username is not None:
-            user = get_object_or_404(MyUser, username=username)
-            queryset = MyUser.objects.exclude(id=user.id)
-            if exclude_sender:
-                queryset = queryset.exclude(id=self.request.user.id)
-            self.fields['participants'].queryset = queryset
-
-    class Meta:
-        model = Conversation
-        fields = ['participants']
-
-    def save(self, commit=True, request=None):
-        conversation = super().save(commit=False)
-        if commit:
-            conversation.save()
-
-        # create the message with the conversation and the sender
-        if request is not None and request.user is not None:
-            Message.objects.create(conversation=conversation, sender=request.user, message=self.cleaned_data['message'])
-
-        return conversation
-
-
-class ConversationView(LoginRequiredMixin, FormMixin, DetailView):
-    model = Conversation
-    template_name = 'conversation.html'
+class SendMessageView(LoginRequiredMixin, FormView):
+    template_name = 'generic_form.html'
     form_class = MessageForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        conversation = self.get_object()
-        context['messages'] = conversation.messages.all().order_by('-created_at')
-        context['message_form'] = self.get_form()
-        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs['conversation'] = Conversation.objects.get(title=self.request.GET['title'])
+        kwargs['sender'] = self.request.user
         return kwargs
 
-class CreateConversationView(LoginRequiredMixin, FormView):
-    template_name = 'generic_form.html'
-    form_class = ConversationForm
-
     def form_valid(self, form):
-        conversation = form.save(commit=False)
-        conversation.save()
-        conversation.participants.add(self.request.user)
-        form.save(commit=True, request=self.request)
-        success_url = reverse_lazy('conversation', kwargs={'username': self.request.user.username, 'pk': conversation.pk})
-        return HttpResponseRedirect(success_url)
+        message = form.save(commit=False)
+        message.conversation = form.conversation
+        message.sender = self.request.user
+        message.save()
+        return super().form_valid(form)
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        # Exclude sender user from the participants field choices
-        form.fields['participants'].queryset = form.fields['participants'].queryset.exclude(id=self.request.user.id)
-        return form
-    
 
-@prevent_multiple_users
-@admin_only
-@login_required
-def page(request):
-    sent_messages = Message.objects.filter(sender=request.user)
-    return render(request, 'page.html', {'sent_messages': sent_messages})
-
-@prevent_multiple_users
-@login_required
-@admin_only
-def home(request):
-        posts = Clock_in.objects.filter(clock_status='clock-in').order_by('-clock_time')
-        clock_out = Clock_in.objects.filter(clock_status='clock-out').order_by('-clock_time')
-        return render(request, 'homepage.html', {'posts': posts, 'clock_out': clock_out })
-\
 def login_view(request):
     if request.method == "POST":
         form = login_form(request.POST)
@@ -221,3 +159,18 @@ def add_AccountView(request):
 def index(request):
 
     return render(request, 'index.html')
+
+@prevent_multiple_users
+@admin_only
+@login_required
+def page(request):
+    sent_messages = Message.objects.filter(sender=request.user)
+    return render(request, 'page.html', {'sent_messages': sent_messages})
+
+@prevent_multiple_users
+@login_required
+@admin_only
+def home(request):
+        posts = Clock_in.objects.filter(clock_status='clock-in').order_by('-clock_time')
+        clock_out = Clock_in.objects.filter(clock_status='clock-out').order_by('-clock_time')
+        return render(request, 'homepage.html', {'posts': posts, 'clock_out': clock_out })

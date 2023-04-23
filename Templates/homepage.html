@@ -1,12 +1,11 @@
 
-<!DOCTYPE html>
-<html>
-    {% include 'navbar.html'%}
+{% include 'navbar.html'%}
     {% block content %}
     {% endblock %}
+    <body>
     <h1>------------------------------------------------------------------------------------------------------------------------------------</h1>
 {% if request.user.is_staff %}
-    <body>
+
         <h1>Management</h1>
 <form method="POST" action="/logout/">
     {% csrf_token %}
@@ -38,16 +37,19 @@
 </ul> 
 {% endfor %}
 </div>
-</body>
-</html>
-
 {% else %}
-<body>
 <form method="POST" action="/login/">
     {% csrf_token %}
     <input type='submit' value='login'/>
 </form>
-<p>Hello, not logged in
+<p>Hello, not logged in</p>
 {% endif %}
-</body>
-</html>
+
+<style>
+    body {
+              font-family: Arial, sans-serif;
+              background-color: #f2f2f2;
+              margin: 0;
+              padding: 0;
+          }
+</style>

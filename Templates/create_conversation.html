@@ -1,6 +1,10 @@
-<h1>Create Conversation with {{ recipient.username }}</h1>
-<form method="post">
+{% include 'navbar.html'%}
+{% block content %}
+{% endblock %}
+<body>
+<form method="POST" action="{% url 'createconversation' %}?username={{ username }}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Send Message</button>
+    <input type='submit' value='submit'/>
 </form>
+</body>

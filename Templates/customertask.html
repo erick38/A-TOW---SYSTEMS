@@ -1,44 +1,39 @@
-
 {% include 'navbar.html'%}
 {% block content %}
 {% endblock %}
 <body>
-<h1>{{ user.username }}'s   --EMPLOYEE'S TASK DASHBOARD MESSENGER-- </h1>
-
-  <div class="row">
-    <div class="col-md-4">
-      <h2>Conversations</h2>
-      <ul>
-        {% for conversation in conversations %}
+<div class="container conversation-container">
+  <div class="col-md-4 conversation-list">
+    <h2>Conversations</h2>
+    <ul>
+      {% for conversation in conversations reversed %}
+      <li>
+        <a href="{% url 'customertask' user.username %}?conversation_id={{ conversation.id }}">
+          {% for participant in conversation.participants.all %}
+            {% if participant.username != user.username %}
+              {{ participant.username }}
+            {% endif %}
+          {% endfor %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <h2>Messages with</h2> 
+  <div class="col-md-8 message-list">
+  
+    {% if current_conversation %}
+      <h2>Messages with {% for participant in current_conversation.participants.all %}{% if participant.username != user.username %}{{ participant.username }}{% endif %}{% endfor %}</h2>
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
           <li>
-            <a href="{% url 'customertask' user.username %}?conversation_id={{ conversation.id }}">
-              {% for participant in conversation.participants.all %}
-                {% if participant.username != user.username %}
-                  {{ participant.username }}
-                {% endif %}
-              {% endfor %}
-            </a>
+            <strong>Message sent by {{ message.sender.username }} at {{ message.created_at }}:</strong>
+            {{ message.message }}
+            {{ message.replied }}
           </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="col-md-8">
-      {% if current_conversation %}
-        <h2>Messages with {% for participant in current_conversation.participants.all %}{% if participant.username != user.username %}{{ participant.username }}{% endif %}{% endfor %}</h2>
-        {% if messages %}
-          <ul>
-            {% for message in messages %}
-              <li>
-                <strong>Message sent by {{ message.sender.username }} at {{ message.created_at }}:</strong>
-                {{ message.message }}
-                {{ message.replied }}
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>No messages yet.</p>
-        {% endif %}
-
+          {% endfor %}
+        </ul>
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="conversation_id" value="{{ current_conversation.id }}">
@@ -47,8 +42,76 @@
           <button type="submit">Send</button>
         </form>
       {% else %}
-        <p>No conversation selected.</p>
+        <p>No messages yet.</p>
       {% endif %}
-    </div>
+    {% else %}
+      <p>No conversation selected.</p>
+    {% endif %}
+    
   </div>
+</div>
 </body>
+
+
+<style>
+  .conversation-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+  .conversation-list {
+    width: 35%;
+    height: 100vh;
+    overflow: auto;
+  }
+
+  .message-list {
+    flex: 1;
+    height: 100vh;
+    overflow: auto;
+    padding: 10px;
+  }
+
+  .message-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .message-list li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    max-width: 75%;
+  }
+
+  .message-list li strong {
+    display: block;
+    margin-bottom: 0px;
+    font-size: 0.8em;
+    color: #666;
+    overflow: auto;
+  }
+
+  .col-md-8 {
+    position: relative;
+  }
+
+  form {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0px;
+    display: flex;
+  }
+  form textarea {
+    flex: 1;
+    margin-right: 10px;
+  }
+</style>

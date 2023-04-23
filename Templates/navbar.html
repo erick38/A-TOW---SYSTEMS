@@ -56,16 +56,18 @@
   <ul>
     <li><h1>A - OK Tire & Towing</h1></li>
     {% if request.user.is_staff %}
-    <li><a href="{% url 'customertask' username=user %}">task</a></li>       
     <li><a href="/addaccount">Add Employee</a></li>
-    {% endif %}
+    <li><a href='/h'>management</a></li>
+    {% endif %} 
+    <li><a href="{% url 'customertask' username=user %}">task</a></li>
     <li><a href='/{{user.username}}'>profile</a></li>
     <li><a href='/payment'>Drop Time</a></li>
-    <li><a href="{% url 'createconversation' user.username %}">Create Conversation</a></li>
-    {% if request.user.is_authenticated %}
+    <li><a href="/createconversation">create conversation</a></li>
+        {% if request.user.is_authenticated %}
+   
     <form method="POST" action="/logout/">
       {% csrf_token %}
-      <input type='submit' value='logout'/>
+      <input type='submit' name='navy'value='logout'/>
     </form>
     {% endif %}
   </ul>
