@@ -29,7 +29,6 @@ def prevent_multiple_users(func):
     return wrapper
 
 
-
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:

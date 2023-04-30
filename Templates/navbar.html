@@ -60,15 +60,17 @@
     <li><a href='/h'>management</a></li>
     {% endif %} 
     <li><a href="{% url 'customertask' username=user %}">task</a></li>
+    <li><a href="{% url 'combined_form' %}">Create Receipt</a></li>
+    <li ><a href="{% url 'submit' %}">Receipts</a></li>
     <li><a href='/{{user.username}}'>profile</a></li>
     <li><a href='/payment'>Drop Time</a></li>
     <li><a href="/createconversation">create conversation</a></li>
         {% if request.user.is_authenticated %}
    
-    <form method="POST" action="/logout/">
+    <li><form method="POST" action="/logout/">
       {% csrf_token %}
       <input type='submit' name='navy'value='logout'/>
-    </form>
+    </form></li>
     {% endif %}
   </ul>
 </nav>

@@ -9,23 +9,71 @@ from .models import MyUser, Conversation, Message, Clock_in
 from django.views.generic.edit import FormView
 from django import forms
 from django.urls import reverse_lazy
-from django.contrib import messages
-from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
-from django.views.generic.edit import CreateView
-from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from towingapp.forms import MessageForm, ConversationForm
 from towingapp.models import Message, Conversation
-from django.views.generic import DetailView
-from django.views.generic.edit import FormMixin
-from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Conversation, MyUser
 from .forms import MessageForm
+from .models import ReceiptPart1, ReceiptPart2, ReceiptPart3, ReceiptPart4
+# from twilio.rest import Client
+from .forms import ReceiptForm
+
+@prevent_multiple_users
+@login_required
+def combined_form(request):
+    if request.method == 'POST':
+        form = ReceiptForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('submit')
+    else:
+        form = ReceiptForm()
+    return render(request, 'generic_form.html', {'form': form})
+
+@prevent_multiple_users
+@login_required
+def submit(request):
+    part1 = ReceiptPart1.objects.all()
+    print(part1)
+    part2 = ReceiptPart2.objects.all()
+    print(part2)
+    part3 = ReceiptPart3.objects.all()
+    print(part3)
+    part4 = ReceiptPart4.objects.all()
+    print(part4)
+    form = {
+        'part1': part1,
+        'part2': part2,
+        'part3': part3,
+        'part4': part4,
+    }
+    return render(request, 'submit.html', {'form': form})
+
+def location_view(request):
+    if request.method == 'POST':
+        # Get the latitude and longitude from the form data and save it to the database
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        # Save the location data to the database
+
+    # Render the location page template
+    return render(request, 'location.html')
+
+# def send_location_request(phone_number):
+#     account_sid = 'YOUR_ACCOUNT_SID'
+#     auth_token = 'YOUR_AUTH_TOKEN'
+#     client = Client(account_sid, auth_token)
+
+#     message = client.messages.create(
+#         body='Please click this link to share your location: https://example.com/location',
+#         from_='YOUR_TWILIO_PHONE_NUMBER',
+#         to=phone_number
+#     )
 
 @prevent_multiple_users
 @login_required
@@ -59,7 +107,8 @@ def customer_task(request, username):
         'messages': messages
     })
 
-
+@prevent_multiple_users
+@login_required
 def CreateConversationView(request):
     if request.method == 'POST':
         form = ConversationForm(request, request.POST)
@@ -70,7 +119,8 @@ def CreateConversationView(request):
         form = ConversationForm(request)
     return render(request, 'generic_form.html', {'form': form})
 
-
+@prevent_multiple_users
+@login_required
 class SendMessageView(LoginRequiredMixin, FormView):
     template_name = 'generic_form.html'
     form_class = MessageForm
@@ -106,9 +156,9 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
     return HttpResponseRedirect(reverse('login_view'))
-    
+
 @prevent_multiple_users
-@login_required 
+@login_required
 def profile_view(request, MyUser_str):
     user = get_object_or_404(MyUser, username=MyUser_str)
     if request.user != user:
@@ -139,8 +189,8 @@ def add_clockin(request):
         form = addclockinform()
     return render(request, 'clock_statusform.html', {'form': form})
 
-@admin_only
 @login_required
+@admin_only
 def add_AccountView(request):
     if request.method == 'POST':
         form = add_AccountForm(request.POST)
@@ -161,15 +211,7 @@ def index(request):
     return render(request, 'index.html')
 
 @prevent_multiple_users
-@admin_only
 @login_required
-def page(request):
-    sent_messages = Message.objects.filter(sender=request.user)
-    return render(request, 'page.html', {'sent_messages': sent_messages})
-
-@prevent_multiple_users
-@login_required
-@admin_only
 def home(request):
         posts = Clock_in.objects.filter(clock_status='clock-in').order_by('-clock_time')
         clock_out = Clock_in.objects.filter(clock_status='clock-out').order_by('-clock_time')

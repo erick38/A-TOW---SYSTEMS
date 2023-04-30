@@ -1,0 +1,220 @@
+<style>
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-height: 500px;
+  overflow-y: auto;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-section h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form-field label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.form-field input,
+.form-field select {
+  font-size: 18px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex: 1;
+}
+
+.form-field input[type="checkbox"] {
+  margin-right: 5px;
+  width: auto;
+}
+
+.form-field input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.form-field input[type="submit"]:hover {
+  background-color: #0069d9;
+}
+
+@media screen and (max-width: 768px) {
+  form {
+    width: 100%;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px;
+  }
+}
+</style>
+{% include 'navbar.html'%}
+{% block content %}
+{% endblock %}
+<body>
+<h1>-------Receipts-------</h1>
+{{form.part1.1.customer_initial }}
+
+  <!-- <form method="post">
+    {% csrf_token %}
+    <h2>Part 1</h2>
+    {% for i in form.part1 %}
+    <h2>Part 1</h2>
+        <p>Customer Initial: {{ i.customer_initial }}</p>
+        <p>Damage Type: {{ i.damage_type }}</p>
+        <p>Description: {{ i.description }}</p>
+    {% endfor %}
+
+    {% for i in form.part2 %}
+    <h2>Part 2</h2>
+        <p>Time of Call: {{ i.time_of_call }}</p>
+        <p>Date In: {{ i.date_in }}</p>
+        <p>Date Out: {{ i.date_out }}</p>
+        <p>Time Start: {{ i.time_start }}</p>
+        <p>Time Finish: {{ i.time_finish }}</p>
+        <p>Name: {{ i.name }}</p>
+        <p>Customer Address: {{ i.customer_address }}</p>
+        <p>Pickup Address: {{ i.pickup_address }}</p>
+        <p>Dropoff Address: {{ i.dropoff_address }}</p>
+        <p>Phone: {{ i.phone }}</p>
+        <p>DL: {{ i.dl }}</p>
+        <p>Jumpstart: {{ i.jumpstart }}</p>
+        <p>Tow: {{ i.tow }}</p>
+        <p>Tire Change: {{ i.tirechange }}</p>
+        <p>Lockout: {{ i.lockout }}</p>
+        <p>Year: {{ i.year }}</p>
+        <p>Make: {{ i.make }}</p>
+        <p>Color: {{ i.color }}</p>
+        <p>Model: {{ i.model }}</p>
+        <p>License No: {{ i.license_no }}</p>
+    {% endfor %}
+
+    {% for i in form.part3 %}
+    <h2>Part 3</h2>
+        <p>VIN Number: {{ i.vin_number }}</p>
+        <p>Policy Number: {{ i.policy_number }}</p>
+        <p>Hook Up: {{ i.hook_up }}</p>
+        <p>Winch: {{ i.winch }}</p>
+        <p>Flares: {{ i.flares }}</p>
+        <p>Dollies: {{ i.dollies }}</p>
+        <p>Scotch Blocks: {{ i.scotch_blocks }}</p>
+        <p>Ramps: {{ i.ramps }}</p>
+        <p>Snatch Blocks: {{ i.snatch_blocks }}</p>
+        <p>Signature: {{ i.signature }}</p>
+    {% endfor %}
+    
+
+    {% for i in form.part4 %}
+    <h2>Part 4</h2>
+        <p>Mileage Start: {{ i.mileage_start }}</p>
+        <p>Mileage Finish: {{ i.mileage_finish }}</p>
+        <p>Mileage Total: {{ i.mileage_total }}</p>
+        <p>Labor Time Start: {{ i.labor_time_start }}</p>
+        <p>Labor Time Finish: {{ i.labor_time_finish }}</p>
+        <p>Labor Time Total: {{ i.labor_time_total }}</p>
+        <p>Extra Person Start: {{ i.extra_person_start }}</p>
+        <p>Extra Person Finish: {{ i.extra_person_finish }}</p>
+            
+        {% endfor %} -->
+
+
+        -----------------------------------------------------------
+
+        <form method="post">
+            {% csrf_token %}
+            <h3>RECEIPT</h3>
+            <h3>Part 1</h3>
+            {{ form.part1.0.customer_initial}}
+            {{ form.part1.0.damage_type }}
+            {{ form.part1.0.description }}
+            
+            <h3>Part 2</h3>
+            {{ form.part2.0.time_of_call }}
+            {{ form.part2.0.date_in }}
+            {{ form.part2.0.date_out }}
+            {{ form.part2.0.time_start }}
+            {{ form.part2.0.time_finish }}
+            {{ form.part2.0.name }}
+            {{ form.part2.0.customer_address }}
+            {{ form.part2.0.pickup_address }}
+            {{ form.part2.0.dropoff_address }}
+            {{ form.part2.0.phone }}
+            {{ form.part2.0.dl }}
+            {{ form.part2.0.jumpstart }}
+            {{ form.part2.0.tow }}
+            {{ form.part2.0.tirechange }}
+            {{ form.part2.0.lockout }}
+            {{ form.part2.0.year }}
+            {{ form.part2.0.make }}
+            {{ form.part2.0.color }}
+            {{ form.part2.0.model }}
+            {{ form.part2.0.license_no }}
+            
+            <h3>Part 3</h3>
+            {{ form.part3.0.vin_number }}
+            {{ form.part3.0.policy_number }}
+            {{ form.part3.0.hook_up }}
+            {{ form.part3.0.winch }}
+            {{ form.part3.0.flares }}
+            {{ form.part3.0.dollies }}
+            {{ form.part3.0.scotch_blocks }}
+            {{ form.part3.0.ramps }}
+            {{ form.part3.0.snatch_blocks }}
+            {{ form.part3.0.signature }}
+            
+            <h3>Part 4</h3>
+            {{ form.part4.0.mileage_start }}
+            {{ form.part4.0.mileage_finish }}
+            {{ form.part4.0.mileage_total }}
+            {{ form.part4.0.labor_time_start }}
+            {{ form.part4.0.labor_time_finish }}
+            {{ form.part4.0.labor_time_total }}
+            {{ form.part4.0.extra_person_start }}
+            {{ form.part4.0.extra_person_finish }}
+            {{ form.part4.0.extra_person_total }}
+            {{ form.part4.0.towing_charge }}
+            {{ form.part4.0.mileage_charge }}
+            {{ form.part4.0.labor_charge }}
+            {{ form.part4.0.extra_person_charge }}
+            {{ form.part4.0.special_equipment_charge }}
+            {{ form.part4.0.storage_charge }}
+            {{ form.part4.0.subtotal }}
+            {{ form.part4.0.tax }}
+            {{ form.part4.0.total }}
+        
+            <button type="submit">Submit</button>
+        </form>
+    </body>
