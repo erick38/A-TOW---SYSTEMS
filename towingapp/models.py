@@ -6,8 +6,6 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 import datetime
 
-
-
 # Create your models here.me
 
 class MyUser(AbstractUser):
@@ -54,28 +52,27 @@ class Message(models.Model):
     message = models.TextField(blank=False, verbose_name='Message')
     created_at = models.DateTimeField(default=timezone.now, verbose_name='Created At')
 
-# def get_first_user_id():
-#     return MyUser.objects.first().id
-class ReceiptPart1(models.Model):
+class Receipt(models.Model):
     SCRATCHED = 'scratched'
     DAMAGED = 'damaged'
     ACCIDENT = 'accident'
     BROKEN = 'broken'
-    DAMAGE_CHOICES = [
+    EMPTY = 'none'
+    DAMAGE_CHOICES = (
         (SCRATCHED, 'Scratched'),
         (DAMAGED, 'Damaged'),
         (ACCIDENT, 'Accident'),
         (BROKEN, 'Broken'),
-    ]
-    
-    damage_type = models.CharField(max_length=20, choices=DAMAGE_CHOICES)
-    description = models.TextField(blank=True, default='', null=False)
-    customer_initial = models.CharField(max_length=2, default='', null=False)
-    
-    def __str__(self):
-        return f'ReceiptPart1 - {self.pk}'
+        (EMPTY, 'None')
+    )
 
-class ReceiptPart2(models.Model):
+
+
+
+
+    description = models.TextField(blank=True, default='', null=True)
+    damage_type = models.CharField(max_length=20, choices=DAMAGE_CHOICES,blank=True, null=True)
+    customer_initial = models.CharField(max_length=2, default='', null=True, blank=True)
     time_of_call = models.CharField(max_length=100, blank=True, default="")
     date_in = models.DateField(blank=True, null=True)
     date_out = models.DateField(blank=True, null=True)
@@ -96,13 +93,6 @@ class ReceiptPart2(models.Model):
     color = models.CharField(max_length=50, blank=True, default="")
     model = models.CharField(max_length=50, blank=True, default="")
     license_no = models.CharField(max_length=20, blank=True, default="")
- 
-
-
-    def __str__(self):
-        return f'ReceiptPart2 - {self.pk}'
-
-class ReceiptPart3(models.Model):
     vin_number = models.CharField(max_length=20, blank=True, default='')
     policy_number = models.CharField(max_length=20, blank=True, default='')
     hook_up = models.BooleanField(blank=True, null=True, default=None)
@@ -113,13 +103,6 @@ class ReceiptPart3(models.Model):
     ramps = models.BooleanField(blank=True, null=True, default=None)
     snatch_blocks = models.BooleanField(blank=True, null=True, default=None)
     signature = models.CharField(max_length=255, blank=True, default='')
-
-    def __str__(self):
-        return f'ReceiptPart3 - {self.pk}'
-    
-
-
-class ReceiptPart4(models.Model):
     mileage_start =  models.IntegerField(blank=True, null=True, default=0)
     mileage_finish = models.IntegerField(blank=True, null=True, default=0)
     mileage_total = models.IntegerField(blank=True, null=True, default=0)
@@ -141,7 +124,7 @@ class ReceiptPart4(models.Model):
     created_at = models.DateTimeField(default=timezone.now,)
 
     def __str__(self):
-        return f'ReceiptPart4 - {self.pk}'
+        return f'Receipt - {self.pk}'
     
 class Coordinates(models.Model):
     identifier = models.CharField(max_length=255)

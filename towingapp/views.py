@@ -24,7 +24,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Conversation, MyUser
 from .forms import MessageForm
-from .models import ReceiptPart1, ReceiptPart2, ReceiptPart3, ReceiptPart4
+from .models import Receipt
 from .forms import ReceiptForm
 from django.http import JsonResponse
 from .models import Coordinates
@@ -82,22 +82,11 @@ def combined_form(request):
         form = ReceiptForm()
     return render(request, 'generic_form.html', {'form': form})
 
+@login_required
 def submit(request):
-    part1 = ReceiptPart1.objects.all()
-    print(part1)
-    part2 = ReceiptPart2.objects.all()
-    print(part2)
-    part3 = ReceiptPart3.objects.all()
-    print(part3)
-    part4 = ReceiptPart4.objects.all()
-    print(part4)
-    form = {
-        'part1': part1,
-        'part2': part2,
-        'part3': part3,
-        'part4': part4,
-    }
-    return render(request, 'submit.html', {'form': form})
+    forms = Receipt.objects.all().order_by('-created_at')
+    context = {'forms': forms}
+    return render(request, 'submit.html', context)
 
 @prevent_multiple_users
 @login_required
