@@ -6,6 +6,7 @@ from .models import ReceiptPart1, ReceiptPart2, ReceiptPart3, ReceiptPart4
 from django.utils import timezone
 
 
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message

@@ -1,0 +1,19 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Success</title>
+</head>
+<body>
+    <h1>Location Saved</h1>
+    <p>Identifier: {{ coordinates.identifier }}</p>
+    <p>Phone Number: {{ coordinates.phone_number }}</p>
+    <p>Latitude: {{ coordinates.latitude }}</p>
+    <p>Longitude: {{ coordinates.longitude }}</p>
+    <p>Google Maps URL:</p>
+    <ul>
+        <li><a href="{{ maps_url }}">{{ maps_url }}</a></li>
+    </ul>
+</body>
+</html>

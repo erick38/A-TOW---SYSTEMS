@@ -11,8 +11,22 @@
     {% csrf_token %}
     <input type='submit' value='logout'/>
 </form>
-<p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>
 
+<p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>.
+    {% if maps_url %}
+    <a href="{{ maps_url }}"> View last location on Google Maps</a>
+{% endif %}
+{% if coordinates %}
+    <h2>List of locations were customers asked for Tow service:</h2>
+    <ul>
+    {% for coord in coordinates %}
+        <li><a href="https://www.google.com/maps/search/?api=1&query={{ coord.latitude }},{{ coord.longitude }}" target="_blank">GPS </a> FOR: (ID): <a href="https://www.google.com/maps/search/?api=1&query={{ coord.latitude }},{{ coord.longitude }}" target="_blank">{{ coord.identifier }}</a> (Order #:) {{ coord.id }} (Date:){{ coord.created_at }} (phone_number:){{ coord.phone_number}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No coordinates found.</p>
+{% endif %}
+</p>
     <div class="clock">
     <h2>clock-ins</h2>
     -----

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Save Location</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      input[required] {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: none;
+  color: transparent;
+  text-shadow: none;
+}
+
+    </style>
+    <script>
+        $(document).ready(function() {
+  // When the button is clicked, get the user's location and submit the form
+  $('#save-location-btn').click(function() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      console.log("Latitude: " + latitude);
+      console.log("Longitude: " + longitude);
+      $('#latitude-input').val(latitude);
+      $('#longitude-input').val(longitude);
+      $('#save-location-form').submit();
+    }, function(error) {
+      console.log(error);
+    });
+  });
+});
+
+    </script>
+</head>
+<body>
+    <h1>Save Location</h1>
+    <form id="save-location-form" method="post" action="{% url 'save_location' %}">
+      {% csrf_token %}
+      <input type="hidden" id="latitude-input" name="latitude">
+      <input type="hidden" id="longitude-input" name="longitude">
+      <input required>
+      <button id="save-location-btn" type="submit">Save Location</button>
+    </form>
+  
+</body>
+</html>

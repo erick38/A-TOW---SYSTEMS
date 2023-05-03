@@ -20,11 +20,13 @@ from towingapp.views import (
     CreateConversationView,
     customer_task,
     combined_form,
+    save_location,
+    success,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='homepage'),
+    path('', views.index, name='index'),
     path('h', views.home, name='homepage'),
     path('payment/', views.add_clockin, name='add_clockin'),
     path('logout/', views.logout_view, name='logout_view'),
@@ -34,6 +36,8 @@ urlpatterns = [
     path('createconversation/', CreateConversationView, name='createconversation'),
     path('<str:username>/customertask/', customer_task, name='customertask'),
     path('addaccount/', views.add_AccountView),
+    path('save_location/', save_location, name='save_location'),
+    path('success/<str:identifier>/', success, name='success'),
     path('<str:MyUser_str>/', views.profile_view, name='profile'),
     path('combined/form/', combined_form, name='combined_form'),
     # path('clock/', views.clockin_detail),

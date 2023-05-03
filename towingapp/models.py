@@ -142,3 +142,11 @@ class ReceiptPart4(models.Model):
 
     def __str__(self):
         return f'ReceiptPart4 - {self.pk}'
+    
+class Coordinates(models.Model):
+    identifier = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

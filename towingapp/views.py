@@ -1,6 +1,11 @@
+from urllib import response
+import uuid
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.models import Group
 from towingapp.decorators import admin_only, prevent_multiple_users
+from django.contrib.auth.models import Group
+from django.test import Client
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render,HttpResponseRedirect, get_object_or_404, redirect, reverse
 from towingapp.forms import add_AccountForm, addclockinform, login_form
@@ -20,10 +25,52 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Conversation, MyUser
 from .forms import MessageForm
 from .models import ReceiptPart1, ReceiptPart2, ReceiptPart3, ReceiptPart4
-# from twilio.rest import Client
 from .forms import ReceiptForm
+from django.http import JsonResponse
+from .models import Coordinates
 
-@prevent_multiple_users
+def save_location(request):
+    if request.method == 'POST':
+        # Generate UUID for the customer
+        identifier = uuid.uuid4().hex
+        # Get latitude and longitude from the browser geolocation API
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        # Check if latitude and longitude values are valid
+        if not latitude or not longitude:
+            return HttpResponseBadRequest('Latitude or longitude is missing')
+        
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except ValueError:
+            return HttpResponseBadRequest('Latitude or longitude is not a valid number')
+        # Create a new Coordinates object and save it to the database
+        coordinates = Coordinates.objects.create(
+            identifier=identifier,
+            latitude=latitude,
+            longitude=longitude
+        )
+        coordinates.save()
+        # Redirect the customer to the success page
+        print(coordinates.identifier,coordinates.latitude, coordinates.longitude, 'coordinates after saved')
+        return redirect('success', identifier=identifier)
+    
+    # Render the page with a button to save the location
+    print('coordinates here')
+    return render(request, 'save_location.html')
+
+def success(request, identifier):
+    # Retrieve the Coordinates object using the provided identifier
+    coordinates = Coordinates.objects.get(identifier=identifier)
+
+    # Create the Google Maps URL
+    maps_url = "https://www.google.com/maps/search/?api=1&query={},{}".format(coordinates.latitude, coordinates.longitude)
+
+    # Render the success page with the Coordinates object and the maps_url variable
+    return render(request, 'success.html', {'coordinates': coordinates, 'maps_url': maps_url})
+
+
 @login_required
 def combined_form(request):
     if request.method == 'POST':
@@ -35,8 +82,6 @@ def combined_form(request):
         form = ReceiptForm()
     return render(request, 'generic_form.html', {'form': form})
 
-@prevent_multiple_users
-@login_required
 def submit(request):
     part1 = ReceiptPart1.objects.all()
     print(part1)
@@ -53,27 +98,6 @@ def submit(request):
         'part4': part4,
     }
     return render(request, 'submit.html', {'form': form})
-
-def location_view(request):
-    if request.method == 'POST':
-        # Get the latitude and longitude from the form data and save it to the database
-        latitude = request.POST.get('latitude')
-        longitude = request.POST.get('longitude')
-        # Save the location data to the database
-
-    # Render the location page template
-    return render(request, 'location.html')
-
-# def send_location_request(phone_number):
-#     account_sid = 'YOUR_ACCOUNT_SID'
-#     auth_token = 'YOUR_AUTH_TOKEN'
-#     client = Client(account_sid, auth_token)
-
-#     message = client.messages.create(
-#         body='Please click this link to share your location: https://example.com/location',
-#         from_='YOUR_TWILIO_PHONE_NUMBER',
-#         to=phone_number
-#     )
 
 @prevent_multiple_users
 @login_required
@@ -106,7 +130,6 @@ def customer_task(request, username):
         'current_conversation': current_conversation,
         'messages': messages
     })
-
 @prevent_multiple_users
 @login_required
 def CreateConversationView(request):
@@ -170,7 +193,7 @@ def profile_view(request, MyUser_str):
         clock_out = user_clockin.filter(clock_status='clock-out').order_by('-clock_time')
         return render(request, "profile.html", {'user_clockin': user_clockin, 'clock_in':clock_in, 'clock_out':clock_out})
 
-
+@prevent_multiple_users
 @login_required
 def add_clockin(request):
     timezone.activate('America/Chicago')
@@ -188,7 +211,7 @@ def add_clockin(request):
     else:
         form = addclockinform()
     return render(request, 'clock_statusform.html', {'form': form})
-
+@prevent_multiple_users
 @login_required
 @admin_only
 def add_AccountView(request):
@@ -207,12 +230,16 @@ def add_AccountView(request):
     return render(request, 'generic_form.html', {'form': form})
     
 def index(request):
-
     return render(request, 'index.html')
-
-@prevent_multiple_users
-@login_required
+    
+@admin_only
 def home(request):
-        posts = Clock_in.objects.filter(clock_status='clock-in').order_by('-clock_time')
-        clock_out = Clock_in.objects.filter(clock_status='clock-out').order_by('-clock_time')
-        return render(request, 'homepage.html', {'posts': posts, 'clock_out': clock_out })
+    posts = Clock_in.objects.filter(clock_status='clock-in').order_by('-clock_time')
+    clock_out = Clock_in.objects.filter(clock_status='clock-out').order_by('-clock_time')
+    # Get the most recent saved location for the current user
+    coordinates = Coordinates.objects.filter().order_by('-created_at').all()
+    if coordinates:
+        maps_url = "https://www.google.com/maps/search/?api=1&query={},{}".format(coordinates[0].latitude, coordinates[0].longitude)
+    else:
+        maps_url = None
+    return render(request, 'homepage.html', {'posts': posts, 'clock_out': clock_out, 'coordinates': coordinates, 'maps_url': maps_url })

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Clock_in, Message, MyUser, Session,Conversation, ReceiptPart1,ReceiptPart2,ReceiptPart3, ReceiptPart4
+from .models import Clock_in, Message, MyUser, Session,Conversation, ReceiptPart1,ReceiptPart2,ReceiptPart3, ReceiptPart4, Coordinates
 # Register your models here.
 
 admin.site.register(MyUser, UserAdmin)
@@ -12,3 +12,4 @@ admin.site.register(ReceiptPart1)
 admin.site.register(ReceiptPart2)
 admin.site.register(ReceiptPart3)
 admin.site.register(ReceiptPart4)
+admin.site.register(Coordinates)

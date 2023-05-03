@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.contrib.sessions.models import Session
 
+
 def prevent_multiple_users(func):
     def wrapper(request, *args, **kwargs):
         # Get the session key of the current user
@@ -27,6 +28,7 @@ def prevent_multiple_users(func):
         return func(request, *args, **kwargs)
 
     return wrapper
+
 
 
 def unauthenticated_user(view_func):
