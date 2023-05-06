@@ -232,3 +232,11 @@ def home(request):
     else:
         maps_url = None
     return render(request, 'homepage.html', {'posts': posts, 'clock_out': clock_out, 'coordinates': coordinates, 'maps_url': maps_url })
+
+def gps(request):
+    coordinates = Coordinates.objects.filter().order_by('-created_at').all()
+    if coordinates:
+        maps_url = "https://www.google.com/maps/search/?api=1&query={},{}".format(coordinates[0].latitude, coordinates[0].longitude)
+    else:
+        maps_url = None
+    return render(request, 'gps.html', {'coordinates': coordinates, 'maps_url': maps_url })

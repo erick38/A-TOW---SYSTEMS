@@ -1,19 +1,39 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Success</title>
+    <style>
+        /* Center the container */
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Style the container as a card */
+        #card {
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Location Saved</h1>
-    <p>Identifier: {{ coordinates.identifier }}</p>
-    <p>Phone Number: {{ coordinates.phone_number }}</p>
-    <p>Latitude: {{ coordinates.latitude }}</p>
-    <p>Longitude: {{ coordinates.longitude }}</p>
-    <p>Google Maps URL:</p>
-    <ul>
-        <li><a href="{{ maps_url }}">{{ maps_url }}</a></li>
-    </ul>
+    <div id="container">
+        <div id="card">
+            <h1>is this your Location?</h1>
+            <p>ID#: {{ coordinates.identifier }} please, save your ID.</p>
+            <!-- <p>Phone Number: {{ coordinates.phone_number }}</p> -->
+            <!-- <p>Latitude: {{ coordinates.latitude }}</p>
+            <p>Longitude: {{ coordinates.longitude }}</p> -->
+            <p>Google Maps URL:</p>
+            <ul>
+                <li><a href="{{ maps_url }}">{{ maps_url }}</a></li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

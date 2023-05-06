@@ -1,76 +1,126 @@
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Style the navbar */
-  nav {
-    background-color: #1A2B42;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  /* Style the logo */
-  nav h1 {
-    font-size: 3rem;
-    font-weight: bold;
-  }
-  
-  /* Style the navigation links */
-  nav ul {
-    display: flex;
-    list-style: none;
-  }
-  
-  nav ul li {
-    margin-left: 20px;
-  }
-  
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  nav ul li a:hover {
-    background-color: #fff;
-    color: #1A2B42;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+      /* Style the navbar */
+      nav {
+        background-color: rgb(40, 175, 176);
+        color: rgb(16, 37, 66);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
 
-<nav>
-  <ul>
-    <li><h1>A - OK Tire & Towing</h1></li>
-    {% if request.user.is_staff %}
-    <li><a href="/addaccount">Add Employee</a></li>
-    <li><a href='/h'>management</a></li>
-    {% endif %} 
-    <li><a href="{% url 'customertask' username=user %}">task</a></li>
-    <li><a href="{% url 'combined_form' %}">Create Receipt</a></li>
-    <li ><a href="{% url 'submit' %}">Receipts</a></li>
-    <li><a href='/{{user.username}}'>profile</a></li>
-    <li><a href='/payment'>Drop Time</a></li>
-    <li><a href="/createconversation">create conversation</a></li>
+      /* Style the logo */
+      nav h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Style the navigation links */
+      nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+      }
+
+      nav ul li {
+        margin-left: 10px;
+      }
+
+      nav ul li a {
+        color: rgb(16, 37, 66);
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      nav ul li a:hover {
+        background-color:rgb(221, 206, 205) 
+      }
+
+      /* Responsive media query */
+      @media screen and (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          padding: 0;
+        }
+
+        nav h2 {
+          font-size: 2rem;
+          margin: 10px 0;
+        }
+
+        nav ul {
+          flex-direction: column;
+          align-items: center;
+          display: none;
+        }
+
+        nav ul.show {
+          display: flex;
+        }
+
+        nav ul li {
+          margin: 10px 0;
+          display: block;
+        }
+
+        nav ul li a {
+          font-size: 1.5rem;
+          padding: 5px;
+        }
+
+        nav .icon {
+          display: block;
+          font-size: 2.5rem;
+          cursor: pointer;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><h2>A - OK Tire & Towing</h2></li>
+        {% if request.user.is_staff %}
+        <li><a href='/addaccount'>Add Employee</a></li>
+        <li><a href='/h'>Manage</a></li>
+        {% endif %} 
+        <li><a href="{% url 'customertask' username=user %}">messenger</a></li>
+        <li><a href="{% url 'combined_form' %}">Create Receipt</a></li>
+        <li><a href="/combined/form/submit/">Receipts</a></li>
+        <li><a href='/{{user.username}}/'>Profile</a></li>
+        <li><a href='/payment/'>DropTime</a></li>
+        <li><a href="/createconversation/">Create Convo</a></li>
         {% if request.user.is_authenticated %}
-   
-    <li><form method="POST" action="/logout/">
-      {% csrf_token %}
-      <input type='submit' name='navy'value='logout'/>
-    </form></li>
-    {% endif %}
-  </ul>
-</nav>
+        <li>
+          <form method="POST" action="/logout/">
+            {% csrf_token %}
+            <input type='submit' name='navy'value='Logout'/>
+          </form>
+        </li>
+      </ul>
+      <a class="icon" onclick="toggleNav()">&#9776;</a>
+      {% endif %} 
+        </nav>
+    <script>
+      function toggleNav() {
+        const navList = document.querySelector("nav ul");
+        navList.classList.toggle("show");
+      }
+    </script>

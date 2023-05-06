@@ -1,0 +1,36 @@
+
+{% include 'navbar.html'%}
+    {% block content %}
+    {% endblock %}
+{% if request.user.is_staff %}
+<h1>Management</h1>
+<ul>
+    <li><a href="/clockinn/">Clock-Ins</a></li>
+    <li><a href="/clockoutt/">Clock-Outs</a></li>
+    <li><a href="/gps">GPS</a></li>
+    <li><a href="/h">All</a></li>
+    <li><a href="/save_location">save_location url</a></li>
+</ul>
+
+<p>Hello, <a href='/{{user.username}}'>{{user.username}}</a>.
+{% if maps_url %}
+    <a href="{{ maps_url }}"> View last location on Google Maps</a>
+{% endif %}
+{% if coordinates %}
+    <h2>locations where customers need Tow service:</h2>
+    <ul>
+    {% for coord in coordinates %}(ID): <a href="https://www.google.com/maps/search/?api=1&query={{ coord.latitude }},{{ coord.longitude }}" target="_blank">{{ coord.identifier }}</a> (Order #:) {{ coord.id }} (Date:){{ coord.created_at }} (phone_number:){{ coo
+        <li><a href="https://www.google.com/maps/search/?api=1&query={{ coord.latitude }},{{ coord.longitude }}" target="_blank">GPS </a> FOR: rd.phone_number}}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endif %}
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+</style>

@@ -22,6 +22,7 @@ from towingapp.views import (
     combined_form,
     save_location,
     success,
+    gps,
 )
 
 urlpatterns = [
@@ -38,6 +39,7 @@ urlpatterns = [
     path('combined/form/submit/', views.submit, name='submit'),
     path('save_location/', save_location, name='save_location'),
     path('success/<str:identifier>/', success, name='success'),
+    path('gps/', gps, name='gps'),
     path('<str:MyUser_str>/', views.profile_view, name='profile'),
     path('combined/form/', combined_form, name='combined_form'),
     # path('clock/', views.clockin_detail),

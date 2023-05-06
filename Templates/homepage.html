@@ -7,6 +7,13 @@
 {% if request.user.is_staff %}
 
         <h1>Management</h1>
+        <ul>
+            <li><a href="/clockinn/">Clock-Ins</a></li>
+            <li><a href="/clockoutt/">Clock-Outs</a></li>
+            <li><a href="/gps">GPS</a></li>
+            <li><a href="/h">All</a></li>
+            <li><a href="/save_location">save_location url</a></li>
+        </ul>
 <form method="POST" action="/logout/">
     {% csrf_token %}
     <input type='submit' value='logout'/>
