@@ -1,6 +1,6 @@
 # A-TOW---SYSTEMS
 Here are all the functionalities of the mobile-friendly application. 
-<img width="1440" alt="Screen Shot 2023-08-21 at 5 55 50 PM" src="https://github.com/erick38/A-TOW---SYSTEMS/assets/69206592/c2abc0e3-b950-4c27-a9fb-30b52c51ab41">
+
 <img width="1440" alt="Screen Shot 2023-08-21 at 5 53 20 PM" src="https://github.com/erick38/A-TOW---SYSTEMS/assets/69206592/48bf1483-1329-4630-86ed-7a5dfcdeed3b">
 <img width="1440" alt="Screen Shot 2023-08-21 at 5 56 39 PM" src="https://github.com/erick38/A-TOW---SYSTEMS/assets/69206592/c1c0276a-2d39-4b40-8d36-067b81a9d848">
 <img width="1440" alt="Screen Shot 2023-08-21 at 5 58 13 PM" src="https://github.com/erick38/A-TOW---SYSTEMS/assets/69206592/0dba78fa-2c93-4a56-a2b0-a67ccb4788d2">
