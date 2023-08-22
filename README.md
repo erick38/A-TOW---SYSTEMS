@@ -1,5 +1,5 @@
-# A-TOW---SYSTEMS if you are cloning repo message me to give you the secrey_key.txt file in order to have 0 errors.
-
+# A-TOW---SYSTEMS 
+if you are cloning repo message me to give you the secrey_key.txt file in order to have 0 errors. dev3bedolla8@gmail.com or https://bedollaztech.herokuapp.com/
 Here are all the functionalities of the mobile-friendly application.
 user-authentication
 <img width="1440" alt="Screen Shot 2023-08-22 at 1 32 56 AM" src="https://github.com/erick38/A-TOW---SYSTEMS/assets/69206592/d0df7561-f72b-4ea0-ac35-fc57184188ad">
