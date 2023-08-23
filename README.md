@@ -29,8 +29,4 @@ this is an example of how staff are able to get google gps assistance by clickin
 
 ## Usage and Licensing
 
-**Important:** This repository contains proprietary code and is not open for public use, modification, or redistribution.
-
-The code and content in this repository are the intellectual property of [erick bedolla] and are subject to copyright law. Unauthorized use, copying, modification, distribution, or any other form of unauthorized reproduction is prohibited without explicit written permission from [erick bedolla].
-
-If you have questions or are interested in licensing this code for your use, please contact [dev3bedolla8@gmail.com].
+If you have questions please contact [dev3bedolla8@gmail.com].
